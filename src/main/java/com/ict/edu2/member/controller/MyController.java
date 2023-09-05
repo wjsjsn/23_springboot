@@ -17,11 +17,8 @@ import com.ict.edu2.member.dao.memberDAO;
 import com.ict.edu2.member.vo.DataVO;
 import com.ict.edu2.member.vo.MemberVO;
 
-import lombok.extern.slf4j.Slf4j;
-
 @RestController
 @RequestMapping("/member")
-@Slf4j
 public class MyController {
     @Autowired
     private memberDAO memberdao;
@@ -55,6 +52,8 @@ public class MyController {
             if(!passwordEncoder.matches(vo.getM_pw(), mvo.getM_pw())){
                dataVO.setSuccess(false);
                dataVO.setMessage("비밀번호가 틀립니다."); 
+               resMap.put("data", dataVO);
+               return resMap;
             }else{
                 // 로그인 정보 저장(Session)
                 session.setAttribute("mvo", mvo);
@@ -62,9 +61,12 @@ public class MyController {
                 // 로그인 성공
                 dataVO.setSuccess(true);
                 dataVO.setMessage("로그인 성공.");
+
+                // 프론트엔드에서 사용하기 위해 저장
+                dataVO.setData(mvo);
+                resMap.put("data", dataVO);
+                return resMap;
             }
-            resMap.put("data", dataVO);
-            return resMap;
         }
     }
 
@@ -78,12 +80,11 @@ public class MyController {
         if(result > 0){
             dataVO.setSuccess(true);
             dataVO.setMessage("회원가입 성공");
-            resMap.put("data", dataVO);
         }else{
             dataVO.setSuccess(false);
             dataVO.setMessage("회원가입 실패");
-            resMap.put("data", dataVO);  
         }
+        resMap.put("data", dataVO);  
         return resMap;
     }
    

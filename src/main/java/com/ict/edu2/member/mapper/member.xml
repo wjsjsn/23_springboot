@@ -17,7 +17,15 @@
     </select>
 
     <insert id="join" parameterType="com.ict.edu2.member.vo.MemberVO">
-      insert into members(m_id, m_pw, m_name, m_age, m_reg)
-      values(#{m_id}, #{m_pw}, #{m_name}, #{m_age}, sysdate())
+      insert into members(m_id, m_pw, m_name, 
+      <if test="m_age != null and m_age != ''">
+        m_age, 
+      </if>
+      m_reg)
+      values(#{m_id}, #{m_pw}, #{m_name}, 
+      <if test="m_age != null and m_age != ''">
+        #{m_age}, 
+      </if>
+      sysdate())
     </insert>
 </mapper>
